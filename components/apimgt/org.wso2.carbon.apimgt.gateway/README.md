@@ -5,5 +5,5 @@ docker-compose up --build
 
 ### shutdown command
 ```
-docker-compose down -
+docker-compose down -v
 ```

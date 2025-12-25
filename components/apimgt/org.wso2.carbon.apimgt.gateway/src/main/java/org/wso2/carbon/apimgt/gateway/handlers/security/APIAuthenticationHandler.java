@@ -320,6 +320,13 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
             authenticators.add(authenticator);
         }
         if (isOAuthProtected) {
+
+            // add additional keycloak authenticator for standard oauth2 jwt
+            EQKeyCloakAuthenticator keyCloakAuthenticator = new EQKeyCloakAuthenticator();
+            keyCloakAuthenticator.init(synapseEnvironment);
+            authenticators.add(keyCloakAuthenticator);
+
+            // default code from wso2
             Authenticator authenticator = new OAuthAuthenticator(authorizationHeader, isOAuthBasicAuthMandatory,
                     removeOAuthHeadersFromOutMessage);
             authenticator.init(synapseEnvironment);
@@ -427,11 +434,11 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
                 String errorMessage = APISecurityConstants.getAuthenticationFailureMessage(e.getErrorCode());
 
                 if (APISecurityConstants.API_AUTH_GENERAL_ERROR_MESSAGE.equals(errorMessage)) {
-                    log.error("API authentication failure due to "
+                    log.error("API authentication failure due to 1"
                             + APISecurityConstants.API_AUTH_GENERAL_ERROR_MESSAGE, e);
                 } else {
                     // We do not need to log known authentication failures as errors since these are not product errors.
-                    log.warn("API authentication failure due to " + errorMessage);
+                    log.warn("API authentication failure due to 2" + errorMessage);
 
                     if (log.isDebugEnabled()) {
                         log.debug("API authentication failed with error " + e.getErrorCode(), e);
@@ -518,6 +525,13 @@ public class APIAuthenticationHandler extends AbstractHandler implements Managed
         AuthenticationResponse authenticationResponse;
         List<AuthenticationResponse> authResponses = new ArrayList<>();
 
+//        EQKeyCloakAuthenticator customValidator = new EQKeyCloakAuthenticator();
+//        log.info("API custom Authentication Handler is started");
+//        AuthenticationResponse x = customValidator.authenticate(messageContext);
+//        log.info("API custom Authentication Handler is finished");
+//        if (x.isAuthenticated()) {
+//            return true;
+//        }
         for (Authenticator authenticator : authenticators) {
             authenticationResponse = authenticator.authenticate(messageContext);
             if (authenticationResponse.isMandatoryAuthentication()) {

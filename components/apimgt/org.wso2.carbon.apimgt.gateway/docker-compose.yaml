@@ -24,11 +24,11 @@ services:
     container_name: api-manager-local-2
     volumes:
       - ./target/org.wso2.carbon.apimgt.gateway-9.20.74.jar:/home/wso2carbon/wso2am-4.1.0/repository/components/plugins/org.wso2.carbon.apimgt.gateway_9.20.74.jar
-    # command: ["-debug *:5005"]
+    command: ["-debug *:5005"]
     ports:
       - 9443:9443
       - 8243:8243
-      # - 5005:5005
+      - 5005:5005
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "9443" ]
       interval: 10s
